@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from datetime import datetime
+import re
 
 from src.application.dto import BroadcastResult, IncomingMessage
 from src.domain.ports import (
@@ -16,6 +17,16 @@ from src.domain.types import DistributionMessage
 
 
 class HandleIncomingDistribution:
+    _DISTRIBUTION_KEYWORD = "распределение"
+    _TRIM_SECTION_TARGETS = {"-4924925820", "-1002251364598"}
+    _REMOVE_SURNAMES_TARGETS = {
+        "-1001788441929",
+        "-1001264961459",
+        "-1002760276834",
+    }
+    _SKIP_FAILURE_NOTICE_TARGETS = {"-1003648836073", "-5296320352"}
+
+
     def __init__(
         self,
         messaging_client: MessagingClient,
@@ -82,8 +93,11 @@ class HandleIncomingDistribution:
         sent_message_ids: dict[str, int] = {}
         for target_chat_id in targets:
             try:
+                outgoing_text = self._prepare_text_for_target(
+                    distribution.text, target_chat_id
+                )
                 message_id = await self._messaging_client.send_message(
-                    target_chat_id, distribution.text
+                    target_chat_id, outgoing_text
                 )
                 sent_message_ids[target_chat_id] = message_id
             except Exception as exc:
@@ -106,6 +120,40 @@ class HandleIncomingDistribution:
             failed_targets=failed_targets,
         )
 
+    def _prepare_text_for_target(self, text: str, target_chat_id: str) -> str:
+        if self._DISTRIBUTION_KEYWORD not in text.casefold():
+            return text
+        if target_chat_id in self._REMOVE_SURNAMES_TARGETS:
+            return self._format_distribution(text, remove_surnames=True)
+        if target_chat_id in self._TRIM_SECTION_TARGETS:
+            return self._format_distribution(text, remove_surnames=False)
+        return text
+
+    def _format_distribution(self, text: str, remove_surnames: bool) -> str:
+        lines = text.splitlines()
+        kept: list[str] = []
+        for line in lines:
+            normalized = line.strip().casefold()
+            if normalized.startswith("без вилл") or normalized.startswith("в ночь"):
+                break
+            kept.append(line)
+
+        while kept and kept[-1].strip() == "":
+            kept.pop()
+
+        processed: list[str] = []
+        for line in kept:
+            if remove_surnames and "/" in line:
+                match = re.match(r"^\s*(\d+)", line)
+                if match:
+                    left, _, right = line.partition("/")
+                    right = right.strip()
+                    if right:
+                        line = f"{match.group(1)} / {right}"
+            processed.append(line)
+
+        return "\n".join(processed) + "\n\n"
+
     async def _send_summary(
         self,
         source_chat_id: str,
@@ -114,12 +162,17 @@ class HandleIncomingDistribution:
     ) -> None:
         if not targets:
             return
+        filtered_failed = [
+            item
+            for item in failed_targets
+            if item not in self._SKIP_FAILURE_NOTICE_TARGETS
+        ]
         sent_targets = [item for item in targets if item not in failed_targets]
         summary_parts = []
         sent_names = await self._resolve_target_names(sent_targets)
         summary_parts.append(f"Переслал в: {', '.join(sent_names)}")
-        if failed_targets:
-            failed_names = await self._resolve_target_names(failed_targets)
+        if filtered_failed:
+            failed_names = await self._resolve_target_names(filtered_failed)
             summary_parts.append(f"Не удалось: {', '.join(failed_names)}")
         summary_text = "\n".join(summary_parts)
         await self._messaging_client.send_message(source_chat_id, summary_text)

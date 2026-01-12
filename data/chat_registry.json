@@ -5,18 +5,6 @@
     "chat_type": "private",
     "username": "Abdyushev_Nikita"
   },
-  "-1003648836073": {
-    "chat_id": "-1003648836073",
-    "title": "\u0422\u0435\u0441\u0442\u043e\u0432\u044b\u0439 \u043a\u0430\u043d\u0430\u043b",
-    "chat_type": "channel",
-    "username": null
-  },
-  "-5296320352": {
-    "chat_id": "-5296320352",
-    "title": "\u0422\u0435\u0441\u0442\u043e\u0432\u0430\u044f \u0433\u0440\u0443\u043f\u043f\u0430",
-    "chat_type": "group",
-    "username": null
-  },
   "7393633811": {
     "chat_id": "7393633811",
     "title": "\u0414\u0435\u043d\u0438\u0441 \u041d\u0435\u043a\u0440\u0430\u0441\u043e\u0432",
@@ -64,5 +52,77 @@
     "title": "\u041d\u0430\u0442\u0430\u043b\u044c\u044f \u0412\u0438\u043a\u0442\u043e\u0440\u043e\u0432\u043d\u0430",
     "chat_type": "private",
     "username": "Natalya_VictOorovna"
+  },
+  "1633827601": {
+    "chat_id": "1633827601",
+    "title": "\u0410\u043b\u0435\u043a\u0441\u0435\u0439 \u041c\u0430\u0440\u0442\u044b\u043d\u043e\u0432",
+    "chat_type": "private",
+    "username": "Aleksei_Martynov"
+  },
+  "-1001264961459": {
+    "chat_id": "-1001264961459",
+    "title": "\u0421\u043e\u0433\u043b\u0430\u0441\u043e\u0432\u0430\u043d\u0438\u0435 \u0440\u0430\u0431\u043e\u0442",
+    "chat_type": "supergroup",
+    "username": null
+  },
+  "704173092": {
+    "chat_id": "704173092",
+    "title": "\u041c\u0438\u043b\u0430\u043d\u0430 \u041c\u043e\u0441\u043a\u0432\u0438\u043d\u0430",
+    "chat_type": "private",
+    "username": "milanammr"
+  },
+  "-4924925820": {
+    "chat_id": "-4924925820",
+    "title": "\u0421\u0411 \u0438 \u0411\u0430\u0442\u043b\u0435\u0440\u044b",
+    "chat_type": "group",
+    "username": null
+  },
+  "-1002760276834": {
+    "chat_id": "-1002760276834",
+    "title": "\u0411\u0430\u0442\u043b\u0435\u0440 \u0441\u0435\u0440\u0432\u0438\u0441 | \u0420\u0435\u0441\u0442\u043e\u0440\u0430\u043d\u044b",
+    "chat_type": "supergroup",
+    "username": null
+  },
+  "-1003255733354": {
+    "chat_id": "-1003255733354",
+    "title": "\u0411\u0421.\u0420\u0430\u0441\u043f\u0440\u0435\u0434\u0435\u043b\u0435\u043d\u0438\u0435 \u0433\u043e\u0441\u0442\u0435\u0439",
+    "chat_type": "supergroup",
+    "username": null
+  },
+  "473127308": {
+    "chat_id": "473127308",
+    "title": "\u042e\u043b\u0438\u044f \u041a\u043e\u0437\u043b\u043e\u0432\u0430",
+    "chat_type": "private",
+    "username": "Juliya_Kozllova"
+  },
+  "-1002251364598": {
+    "chat_id": "-1002251364598",
+    "title": "Butlers & FO",
+    "chat_type": "supergroup",
+    "username": null
+  },
+  "6843557009": {
+    "chat_id": "6843557009",
+    "title": "\u0415\u0444\u0438\u043c \u041e\u0440\u043b\u043e\u0432",
+    "chat_type": "private",
+    "username": "EfimOrlov1"
+  },
+  "808969007": {
+    "chat_id": "808969007",
+    "title": "\u0414\u0435\u043d\u0438\u0441 \u041a\u0430\u0440\u043c\u0430\u043d\u043e\u0432",
+    "chat_type": "private",
+    "username": "KarmanovDenis"
+  },
+  "1690449089": {
+    "chat_id": "1690449089",
+    "title": "\u0410\u043b\u0435\u043a\u0441\u0430\u043d\u0434\u0440 \u041c\u0430\u043a\u0443\u0445\u0438\u043d",
+    "chat_type": "private",
+    "username": "Alexander_Makukhin"
+  },
+  "1404926989": {
+    "chat_id": "1404926989",
+    "title": "\u0415\u0433\u043e\u0440 \u041e\u043d\u0438\u0449\u0443\u043a",
+    "chat_type": "private",
+    "username": "Egor_Onischuk"
   }
 }
