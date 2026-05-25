@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from datetime import datetime
+from datetime import date, datetime
 
 
 ChatId = str
@@ -23,3 +23,13 @@ class DistributionMessage:
     source_chat_id: ChatId
     sender_id: UserId
     received_at: datetime
+
+
+@dataclass(frozen=True)
+class HousekeepingComment:
+    chat_id: ChatId
+    room: str
+    start_date: date
+    checkout_date: date
+    text: str
+    created_at: datetime

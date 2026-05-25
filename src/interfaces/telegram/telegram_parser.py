@@ -26,6 +26,7 @@ class TelegramUpdateParser:
             source_chat_id=str(chat.get("id", "")),
             sender_id=str(sender.get("id", "")),
             received_at=datetime.utcfromtimestamp(timestamp) if timestamp else datetime.utcnow(),
+            message_id=message.get("message_id"),
         )
 
     def parse_chat_info(self, update: dict[str, Any]) -> ChatInfo | None:

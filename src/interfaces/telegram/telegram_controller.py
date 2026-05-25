@@ -6,6 +6,9 @@ from src.application.dto import BroadcastResult
 from src.application.use_cases.handle_incoming_distribution import (
     HandleIncomingDistribution,
 )
+from src.application.use_cases.handle_housekeeping_comments import (
+    HandleHousekeepingComments,
+)
 from src.application.use_cases.manage_targets import ManageTargets
 from src.application.use_cases.delete_last_distribution import DeleteLastDistribution
 from src.domain.ports import ChatRegistryRepository, Logger
@@ -16,6 +19,7 @@ class TelegramUpdateController:
     def __init__(
         self,
         use_case: HandleIncomingDistribution,
+        housekeeping_comments: HandleHousekeepingComments,
         manage_targets: ManageTargets,
         delete_last: DeleteLastDistribution,
         chat_registry: ChatRegistryRepository,
@@ -23,6 +27,7 @@ class TelegramUpdateController:
         logger: Logger,
     ) -> None:
         self._use_case = use_case
+        self._housekeeping_comments = housekeeping_comments
         self._manage_targets = manage_targets
         self._delete_last = delete_last
         self._chat_registry = chat_registry
@@ -36,6 +41,13 @@ class TelegramUpdateController:
 
         incoming = self._parser.parse(update)
         if not incoming:
+            return None
+
+        housekeeping_result = await self._housekeeping_comments.execute(incoming)
+        if housekeeping_result.handled:
+            self._logger.info(
+                f"Housekeeping comment result: {housekeeping_result.reason}"
+            )
             return None
 
         command = self._parse_command(incoming.text)

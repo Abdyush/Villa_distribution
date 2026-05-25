@@ -14,5 +14,15 @@ class TelegramBotClient(MessagingClient):
         message = await self._bot.send_message(chat_id=chat_id, text=text)
         return int(message.message_id)
 
+    async def reply_to_message(
+        self, chat_id: ChatId, message_id: MessageId, text: str
+    ) -> MessageId:
+        message = await self._bot.send_message(
+            chat_id=chat_id,
+            text=text,
+            reply_to_message_id=message_id,
+        )
+        return int(message.message_id)
+
     async def delete_message(self, chat_id: ChatId, message_id: MessageId) -> None:
         await self._bot.delete_message(chat_id=chat_id, message_id=message_id)

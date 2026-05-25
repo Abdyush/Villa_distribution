@@ -20,6 +20,9 @@ if str(PROJECT_ROOT) not in sys.path:
 from src.application.use_cases.handle_incoming_distribution import (
     HandleIncomingDistribution,
 )
+from src.application.use_cases.handle_housekeeping_comments import (
+    HandleHousekeepingComments,
+)
 from src.application.use_cases.delete_last_distribution import DeleteLastDistribution
 from src.application.use_cases.manage_targets import ManageTargets
 from src.infrastructure.auth.file_auth_repository import FileAuthorizationRepository
@@ -36,6 +39,9 @@ from src.infrastructure.distribution.file_last_distribution_repository import (
     FileLastDistributionRepository,
 )
 from src.infrastructure.logging.std_logger import StdLogger
+from src.infrastructure.housekeeping.file_housekeeping_comment_repository import (
+    FileHousekeepingCommentRepository,
+)
 from src.infrastructure.messaging.telegram_chat_info_provider import (
     TelegramChatInfoProvider,
 )
@@ -66,6 +72,9 @@ def build_controller(bot: Bot, logger: StdLogger) -> TelegramUpdateController:
     last_distribution_repo = FileLastDistributionRepository(
         _data_path("last_distribution.json")
     )
+    housekeeping_comment_repo = FileHousekeepingCommentRepository(
+        _data_path("housekeeping_comments.json")
+    )
 
     use_case = HandleIncomingDistribution(
         messaging_client=messaging_client,
@@ -81,6 +90,11 @@ def build_controller(bot: Bot, logger: StdLogger) -> TelegramUpdateController:
         auth_repo=auth_repo,
         logger=logger,
     )
+    housekeeping_comments = HandleHousekeepingComments(
+        messaging_client=messaging_client,
+        comment_repo=housekeeping_comment_repo,
+        logger=logger,
+    )
     delete_last = DeleteLastDistribution(
         messaging_client=messaging_client,
         auth_repo=auth_repo,
@@ -91,6 +105,7 @@ def build_controller(bot: Bot, logger: StdLogger) -> TelegramUpdateController:
     parser = TelegramUpdateParser()
     return TelegramUpdateController(
         use_case=use_case,
+        housekeeping_comments=housekeeping_comments,
         manage_targets=manage_targets,
         delete_last=delete_last,
         chat_registry=chat_registry,

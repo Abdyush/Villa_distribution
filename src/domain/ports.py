@@ -1,12 +1,25 @@
 from __future__ import annotations
 
+from datetime import date
 from typing import Protocol
 
-from .types import ChatId, ChatInfo, DistributionMessage, MessageId, UserId
+from .types import (
+    ChatId,
+    ChatInfo,
+    DistributionMessage,
+    HousekeepingComment,
+    MessageId,
+    UserId,
+)
 
 
 class MessagingClient(Protocol):
     async def send_message(self, chat_id: ChatId, text: str) -> MessageId:
+        ...
+
+    async def reply_to_message(
+        self, chat_id: ChatId, message_id: MessageId, text: str
+    ) -> MessageId:
         ...
 
     async def delete_message(self, chat_id: ChatId, message_id: MessageId) -> None:
@@ -70,4 +83,23 @@ class LastDistributionRepository(Protocol):
         ...
 
     def clear(self, source_chat_id: ChatId) -> None:
+        ...
+
+
+class HousekeepingCommentRepository(Protocol):
+    def save(self, comment: HousekeepingComment) -> None:
+        ...
+
+    def find_active(
+        self,
+        chat_id: ChatId,
+        room: str,
+        target_date: date,
+    ) -> HousekeepingComment | None:
+        ...
+
+    def delete_for_room(self, chat_id: ChatId, room: str) -> int:
+        ...
+
+    def delete_expired(self, chat_id: ChatId, target_date: date) -> int:
         ...

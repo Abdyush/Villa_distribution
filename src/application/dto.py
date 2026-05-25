@@ -12,6 +12,7 @@ class IncomingMessage:
     source_chat_id: ChatId
     sender_id: UserId
     received_at: datetime
+    message_id: int | None = None
 
 
 @dataclass(frozen=True)
