@@ -19,7 +19,7 @@ class HandleHousekeepingComments:
     HOUSEKEEPING_CHAT_ID = "-1001947490752"
     _MOSCOW_TZ = timezone(timedelta(hours=3))
     _COMMENT_PREFIX = "#коммент"
-    _ROOM_RE = re.compile(r"^\s*(\d{3,5})(?:\s+|$)")
+    _ROOM_RE = re.compile(r"(?<!\d)(\d{3,5})(?!\d)")
     _TOKEN_VS_RE = re.compile(r"(?<![а-яёa-z0-9])вс(?![а-яёa-z0-9])", re.IGNORECASE)
     _DATE_RE = re.compile(r"^(\d{1,2})\.(\d{1,2})(?:\.(\d{2}|\d{4}))?$")
 
@@ -161,17 +161,16 @@ class HandleHousekeepingComments:
         return room, start_date, checkout_date, comment_text
 
     def _extract_triggered_room(self, text: str) -> str | None:
-        match = self._ROOM_RE.match(text)
-        if not match:
-            return None
-        rest = text[match.end() :].casefold()
+        normalized = text.casefold()
         if (
-            "уборк" in rest
-            or "убрать" in rest
-            or "вечерний сервис" in rest
-            or self._TOKEN_VS_RE.search(rest)
+            "уборк" in normalized
+            or "убрать" in normalized
+            or "вечерний сервис" in normalized
+            or self._TOKEN_VS_RE.search(normalized)
         ):
-            return match.group(1)
+            match = self._ROOM_RE.search(text)
+            if match:
+                return match.group(1)
         return None
 
     def _parse_date(self, value: str, default_year: int) -> date | None:
